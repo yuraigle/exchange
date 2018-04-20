@@ -14,9 +14,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf.urls import url
+from django.views.generic import TemplateView
 from exchange.server import views
-
 
 urlpatterns = [
     url(r'^v1/', views.read_rate, name='read_rate'),
+    url(r'^$', TemplateView.as_view(template_name="templates/front.html")),
 ]

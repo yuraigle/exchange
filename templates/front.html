@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+          integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <title>Currency Conversion</title>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="d-flex justify-content-center align-items-center container mt-5">
+        <div class="row">
+            <form class="form-inline" id="c_form" method="GET" action="/v1/">
+                <div class="form-group">
+                    <label for="c_amount" class="mx-2">Convert</label>
+                    <input type="text" class="form-control" id="c_amount" name="amount">
+                </div>
+                <div class="form-group mx-sm-3">
+                    <label for="from"></label>
+                    <select class="form-control" id="from" name="from">
+                        <option value="USD">US Dollar</option>
+                        <option value="EUR">Euro</option>
+                        <option value="CZK">Czech Koruna</option>
+                        <option value="PLN">Polish Złoty</option>
+                    </select>
+                </div>
+                <div class="form-group mx-sm-3">
+                    <label for="to" class="mx-2">To</label>
+                    <select class="form-control" id="to" name="to">
+                        <option value="USD">US Dollar</option>
+                        <option value="EUR">Euro</option>
+                        <option value="CZK">Czech Koruna</option>
+                        <option value="PLN">Polish Złoty</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center align-items-center container mt-5">
+        <div class="alert alert-info" id="res" style="display: none;"></div>
+        <div class="alert alert-danger" id="msg" style="display: none;"></div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#c_form").submit(function (event) {
+            event.preventDefault();
+            $.ajax({
+                type: 'GET',
+                url: '/v1/',
+                data: $("#c_form").serialize(),
+                dataType: 'json',
+                success: function (data) {
+                    if (data.err) {
+                        $("#msg").html(data.err).show();
+                        $("#res").hide();
+                    } else {
+                        $("#res").html(data.amount + " " + data.currency).show();
+                        $("#msg").hide();
+                    }
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
