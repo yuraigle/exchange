@@ -32,19 +32,9 @@ class Command(BaseCommand):
     rest = currencies[:]
     rest.remove("USD")
 
-    # CZKUSD = 1 / USDCZK
-    for c_from in rest:
-        cr1 = CurrencyRate.objects.get(code_from="USD", code_to=c_from)
-        cr, created = CurrencyRate.objects.update_or_create(
-            code_from=c_from, code_to="USD",
-            defaults={'rate': round(1 / cr1.rate, 6),
-                      'last_update': cr1.last_update}
-        )
-        cr.save()
-
     # CZKPLN = USDPLN / USDCZK
     for c_from in rest:
-        for c_to in rest:
+        for c_to in currencies:
             cr1 = CurrencyRate.objects.get(code_from="USD", code_to=c_from)
             cr2 = CurrencyRate.objects.get(code_from="USD", code_to=c_to)
             cr, created = CurrencyRate.objects.update_or_create(
