@@ -13,32 +13,10 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path, include
 from django.conf.urls import url
-from exchange.server.models import CurrencyRate
-from rest_framework import serializers, viewsets, routers
+from exchange.server import views
 
-
-class CurrencyRateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CurrencyRate
-        fields = ('code', 'rate', 'last_update')
-
-
-# ViewSets define the view behavior.
-class CurrencyRateViewSet(viewsets.ModelViewSet):
-    queryset = CurrencyRate.objects.all()
-    serializer_class = CurrencyRateSerializer
-
-
-# Routers provide a way of automatically determining the URL conf.
-router = routers.DefaultRouter()
-router.register(r'exchange-api', CurrencyRateViewSet)
 
 urlpatterns = [
-    # path('admin/', admin.site.urls),
-    url(r'^', include(router.urls)),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    # url(r'^v1/(\w{3})/(\d+)', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^v1/', views.read_rate, name='read_rate'),
 ]
